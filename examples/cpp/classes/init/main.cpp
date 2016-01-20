@@ -3,15 +3,23 @@
 
 class A {
 public:
-  A(int m, int n) : number1(m), number2(n) { }
-  int getNumber1() const { return number1; }
+  A();
+  A (int n) : number(n) {}
+  A (const A& a) : number(a.number) {}
+  int getNumber() const { return number; }
 private:
-  int number1;
-  int number2;
+  int number;
 };
+std::ostream& operator<<(std::ostream& out, const A& a) {
+  return out << a.getNumber();
+}
+A::A() : number(0) { 
+  std::cout << "default: " << number << std::endl; 
+}
 
 int main() {
-  A a(7);
-  std::cout << a.getNumber() << std::endl;
+  A x = 7;
+  A c=x;
+  std::cout << x << std::endl;
   return 0;
 }
