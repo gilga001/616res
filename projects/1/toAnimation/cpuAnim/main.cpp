@@ -86,6 +86,9 @@ int main() {
     if ( x <= 600.0 ) {
       x += INCR_X;
     }
+    else {
+      makeVideo = false;
+    }
     draw(sky, screen);
     draw(star, screen, x, y);
     SDL_Flip(screen);
