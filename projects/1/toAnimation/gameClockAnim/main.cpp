@@ -73,11 +73,10 @@ int main() {
     float x = START_X;
     float y = START_Y;
     SDL_Event event;
-    bool makeVideo = true;
+    bool makeVideo = false;
     bool done = false;
     GenerateFrames genFrames(screen);
     unsigned int frames = 0u;
-    double ticks = SDL_GetTicks();
     while ( !done) {
       while ( SDL_PollEvent(&event) ) {
         if (event.type == SDL_QUIT) done = true;
