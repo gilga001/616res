@@ -36,7 +36,6 @@ void blit(SDL_Surface* image, SDL_Surface* screen) {
   SDL_Rect src = { 0, 0, w, h };
   SDL_Rect dest = {0, 0, 0, 0 };
   SDL_BlitSurface(image, &src, screen, &dest);
-  SDL_Flip(screen);
 }
 
 int main() {
@@ -62,6 +61,7 @@ int main() {
         if (event.key.keysym.sym == SDLK_ESCAPE) break;
       }
     }
+    SDL_Flip(screen);
   }
   SDL_FreeSurface(image);
   }
