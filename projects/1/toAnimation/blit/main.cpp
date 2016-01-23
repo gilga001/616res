@@ -52,6 +52,7 @@ int main() {
    SDL_FreeSurface(temp);
 
    blit(image, screen);
+   SDL_Flip(screen);
    SDL_Event event;
    while (true) {
      if ( SDL_PollEvent(&event) ) {
@@ -60,7 +61,6 @@ int main() {
          if (event.key.keysym.sym == SDLK_ESCAPE) break;
        }
      }
-     SDL_Flip(screen);
    }
    SDL_FreeSurface(image);
   }
