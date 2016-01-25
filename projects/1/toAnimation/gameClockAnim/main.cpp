@@ -49,9 +49,8 @@ void draw(SDL_Surface* image, SDL_Surface* screen,
 void update(float& x) {
   // We compute the number of ticks, i.e. milliseconds, that have
   // elapsed since the last time through the event loop:
-  static unsigned int currentTicks = SDL_GetTicks();
   static unsigned int prevTicks = SDL_GetTicks();
-  currentTicks = SDL_GetTicks();
+  unsigned int currentTicks = SDL_GetTicks();
   unsigned int elapsedTicks = currentTicks - prevTicks;
   // This is the distance formula: distance = rate * time:
   float incr = X_VELOCITY * elapsedTicks * 0.001;
