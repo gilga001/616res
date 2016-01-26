@@ -55,9 +55,8 @@ void draw(SDL_Surface* image, SDL_Surface* screen,
 
 bool update(float& x) {
   static unsigned int remainder = 0u; // ***
-  static unsigned int currentTicks = 0u;
   static unsigned int prevTicks = SDL_GetTicks();
-  currentTicks = SDL_GetTicks();
+  unsigned int currentTicks = SDL_GetTicks();
   unsigned int elapsedTicks = currentTicks - prevTicks + remainder; // ***
 
   if( elapsedTicks < DT ) return false; // ***
@@ -84,7 +83,7 @@ int main() {
     float x = -star->w;
     float y = START_Y;
     SDL_Event event;
-    bool makeVideo = false;
+    bool makeVideo = true;
     bool done = false;
     bool freshFrame = false; // ***
     GenerateFrames genFrames(screen);
