@@ -9,7 +9,6 @@
 const unsigned int WIDTH = 854u;
 const unsigned int HEIGHT = 480u;
 
-const float START_X = 40.0;
 const float START_Y = 350.0;
 const float INCR_X = 0.3;
 const float X_VELOCITY = 300.0;
@@ -69,10 +68,10 @@ int main() {
     SDL_Surface *sky = getImage("images/sky.bmp");
     SDL_Surface *star = getImage("images/greenball.bmp", true);
 
-    float x = START_X;
+    float x = -star->w;
     float y = START_Y;
     SDL_Event event;
-    bool makeVideo = false;
+    bool makeVideo = true;
     bool done = false;
     GenerateFrames genFrames(screen);
     unsigned int frames = 0u;
@@ -87,16 +86,10 @@ int main() {
           }
         }
       }
-      if (makeVideo && genFrames.getFrameCount()<genFrames.getMaxFrames()) {
+      if ( makeVideo ) {
         genFrames.makeFrame();
       }
-      else if (makeVideo ) {
-        std::cout << genFrames.getMaxFrames() 
-                  << " have been generated." 
-                  << std::endl;
-        makeVideo = false;
-      }
-      if ( x <= 600.0 ) {
+      if ( x <= WIDTH-star->w ) {
         update(x);
       }
       else {
