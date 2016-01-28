@@ -28,7 +28,7 @@ void init() {
   atexit(SDL_Quit);
 }
 
-SDL_Surface* getImage(const std::string& filename, bool setColorKey=true) {
+SDL_Surface* getImage(const std::string& filename, bool setColorKey) {
   SDL_Surface *temp = SDL_LoadBMP(filename.c_str());
   if (temp == NULL) {
     throw std::string("Unable to load bitmap.")+SDL_GetError();
@@ -78,7 +78,7 @@ int main() {
     if (screen == NULL) {
       throw std::string("Unable to set video mode: ")+SDL_GetError();
     }
-    SDL_Surface *sky = getImage("images/sky.bmp");
+    SDL_Surface *sky = getImage("images/sky.bmp", false);
     SDL_Surface *star = getImage("images/redstar32.bmp", true);
 
     float x = -star->w;
