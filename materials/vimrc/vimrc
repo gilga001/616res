@@ -1,0 +1,150 @@
+" Name:      ~/.vimrc
+" Author:    Nick Kraft; modified by Brian Malloy
+" Reference: www.vim.org --> Tips
+" Modified:  12/12/03
+
+nmap <C-V> "+gP
+imap <C-V> <ESC><C-V>i
+vmap <C-C> "+y
+winpos 40 0
+"set mouse=nicr
+set lines=24
+set guifont=DejaVu\ Sans\ Mono\ 12
+set nocompatible                "Use Vim extensions
+set backspace=indent,eol,start  "More powerful backspacing
+set number                      "Line numbers
+"set textwidth=80                "Wrap at 80 char
+set nobackup                    "No backup file
+set ruler                       "Show cursor position always
+set showmode                    "Tell when in insert mode
+set showmatch                   "Show matching () {} etc
+set hlsearch                    "Highlight what is searched for
+set incsearch                   "Highlight as you type
+set tabstop=2                   "Length of tab
+set shiftwidth=2
+set softtabstop=2
+set autoindent
+set expandtab
+set laststatus=2
+set cursorline
+set cursorcolumn
+set fileformats=unix,dos,mac
+set nostartofline
+set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
+syntax on
+"set iskeyword-=_                "cw should consider _ a delimeter
+
+set viminfo='10,\"100,:20,%,n~/.viminfo
+" comment next line to quit opening at last spot (nkraft)
+au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif 
+
+" import colors            " For Use With:
+"colorscheme greenday       " transparent (dark) or black terminal
+"colorscheme lightgreenday " transparent (light) or white terminal
+"colorscheme darkgreenday  " (provides) black terminal
+
+"  Usage: au <modes> <files> so <syntax_file_full_path>
+" Action: highlight <files> as defined in <syntax_file_full_path>
+"   Note: $VIMRUNTIME = /usr/share/vim (Mandrake 10CE)
+"  Extra: dir $HOME/.vim/syntax must exist and
+"                               contain custom vim syntax files
+
+"au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
+"                         \ exe "normal g'\"" | endif
+
+autocmd BufRead Makefile set noexpandtab
+autocmd BufRead *.am set noexpandtab
+autocmd BufRead makefile set noexpandtab
+autocmd BufRead *.xmi set tabstop=2 shiftwidth=2 softtabstop=2 smartindent
+autocmd BufRead *.pl set tabstop=2 shiftwidth=2 softtabstop=2 smartindent cinwords={
+autocmd BufRead *.cpp set tabstop=2 shiftwidth=2 softtabstop=2 smartindent cinwords={
+autocmd BufRead *.h set tabstop=2 shiftwidth=2 softtabstop=2 smartindent cinwords={
+autocmd BufRead *.py set tabstop=4 shiftwidth=4 softtabstop=4 smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+
+au BufRead,BufNewFile *.cc      so $HOME/.vim/syntax/cppstl.vim
+au BufRead,BufNewFile *.cpp     so $HOME/.vim/syntax/cppstl.vim
+au BufRead,BufNewFile *.cxx     so $HOME/.vim/syntax/cppstl.vim
+au BufRead,BufNewFile *.C       so $HOME/.vim/syntax/cppstl.vim
+au BufRead,BufNewFile *.h       so $HOME/.vim/syntax/cppstl.vim
+au BufRead,BufNewFile *.hpp     so $HOME/.vim/syntax/cppstl.vim
+au BufRead,BufNewFile *.tc      so $HOME/.vim/syntax/treecc.vim
+au BufRead,BufNewFile *.treecc  so $HOME/.vim/syntax/treecc.vim
+au BufRead,BufNewFile *.bison   so $HOME/.vim/syntax/yacc.vim
+au BufRead,BufNewFile *.btyacc  so $HOME/.vim/syntax/yacc.vim
+au BufRead,BufNewFile *.y       so $HOME/.vim/syntax/yacc.vim
+au BufRead,BufNewFile *.ypp     so $HOME/.vim/syntax/yacc.vim
+au BufRead,BufNewFile *.flex    so $HOME/.vim/syntax/lex.vim
+
+au BufRead,BufNewFile *.c       so $VIMRUNTIME/syntax/c.vim
+
+"  Usage: iab <prefix> <expansion>
+" Action: Typing <prefix> then space will be expanded to <expansion>
+"   Note: <prefix> can be anything so be careful (e.g. don't do this: 'iab i #include' )
+iab #c class
+iab #d #define
+iab #i #include
+iab #s struct
+
+" adopted from vim.org - map tab to completion except at beginning of line (needed for Makefiles)
+function InsertTabWrapper()
+  let col = col('.') - 1
+  if !col
+    return "\<tab>"
+  else
+    return "\<c-p>"
+  endif
+endfunction
+
+"  Usage: inoremap <key1> <key2>
+" Action: Map <key1> to <key2>
+"inoremap <tab> <c-r>=InsertTabWrapper()<cr>
+"inoremap <f1> <esc>  " Allow for accidental key press
+
+noremap <f1> <c-u>   " Goto line 1
+noremap <f2> <c-d>   " Goto last line
+noremap <c-i> <c-a>  " Allow increment with ctrl-i
+
+"map e mz'cO<Esc>i#if 0<Esc>'zo<esc>i#endif<Esc>
+
+" Disable autoindent - yes, all of them
+"set nocindent
+"set nosmartindent
+"set noautoindent
+"set indentexpr=
+"filetype indent off
+"filetype plugin indent off 
+
+" Search the first x lines for Last Modified: and update the current datetime.
+function! LastMod()
+    if line("$") > 50
+let l = 50
+    else
+let l = line("$")
+    endif
+    exe "1," . l . "g/Last Modified: /s/Last Modified: .*/Last Modified: " .
+\ strftime("%A, %d-%b-%Y %T %Z")
+endfun
+
+" This auto command will call LastMod function everytime you save a file
+autocmd BufWrite *   ks|call LastMod()|'s
+"
+"set nocindent
+"set nosmartindent
+"set noautoindent
+"set indentexpr=
+"filetype indent off
+"filetype plugin indent off
+
+":set nocompatible
+
+" Only do this part when compiled with support for autocommands.
+if has("autocmd")
+
+  " When editing a file, always jump to the last known cursor position.
+  autocmd BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal g`\"" |
+    \ endif
+
+endif " has("autocmd")
+
