@@ -1,0 +1,13 @@
+Hi Professor Malloy,
+
+I am working on the Project1. I'm getting Linker errors when I try compiling with the simple make file. Specifically, it throws errors when running the line below:
+
+g++ -g -Wall -Weffc++ -Wextra -pedantic -o run main.o MyDatabase.o
+
+Error is:
+
+/home/xxxxxxx/MySingletonProject1/MyDatabase.cpp:15: undefined reference to `MyDatabase::databaseInstance'
+
+Can you please suggest what could be the issue? I have googled about this, but I have declared my methods in the header file and imported it correctly in main.cpp and MyDatabase.cpp.
+
+Regards,
