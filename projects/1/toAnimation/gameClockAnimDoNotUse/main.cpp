@@ -66,12 +66,12 @@ int main() {
     }
 
     SDL_Surface *sky = getImage("images/sky.bmp");
-    SDL_Surface *star = getImage("images/greenball.bmp", true);
+    SDL_Surface *star = getImage("images/redstar32.bmp", true);
 
     float x = -star->w;
     float y = START_Y;
     SDL_Event event;
-    bool makeVideo = true;
+    bool makeVideo = false;
     bool done = false;
     GenerateFrames genFrames(screen);
     unsigned int frames = 0u;
@@ -93,7 +93,7 @@ int main() {
         update(x);
       }
       else {
-        // Stop the frame capture when the animation if finished:
+        // Stop the frame capture when the animation is finished:
         makeVideo = false;
       }
       draw(sky, screen);

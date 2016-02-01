@@ -10,3 +10,7 @@ The usual progression for viewing the files in the directories should be:
       and the SDL game clock to generate a smooth animation that
       runs the same on all platforms and computers.
   (5) smoothAnim -- this one's the best
+
+To make a video from a list of frames:
+
+avconv -r 60 -i username.%4d.bmp username.mp4

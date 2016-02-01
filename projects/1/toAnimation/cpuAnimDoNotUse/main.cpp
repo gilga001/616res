@@ -1,10 +1,8 @@
-// Brian Malloy and Chris Malloy
-// This example illustrates an approach to capturing 60 frames
-// per second to form a smooth, efficient animation.
-// The resulting frame rate of the generated movie exactly matches 
-// the frame rate captured in the program below.
-// By setting makeVideo to true on line 88, frame capture begins at
-// the beginning of the program and ends when the animation completes.
+// Brian Malloy, 2D animation with SDL and C++
+// This animation will run at different speeds on different platforms,
+// which is not good. Also, capturing frames slows the animation,
+// which means that this approach should never be used!
+// This example if for demonstrating how not to implement an animation.
 
 #include <SDL.h>
 #include <iostream>
@@ -15,11 +13,7 @@ const unsigned int WIDTH = 854u;
 const unsigned int HEIGHT = 480u;
 
 const float START_Y = 350.0;
-const float INCR_X = 0.3;
-const float X_VELOCITY = 300.0;
-
-// Approximately 60 frames per second: 60/1000
-const unsigned int DT = 17u; // ***
+const float INCR_X = 0.1;
 
 void init() {
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -28,7 +22,7 @@ void init() {
   atexit(SDL_Quit);
 }
 
-SDL_Surface* getImage(const std::string& filename, bool setColorKey) {
+SDL_Surface* getImage(const std::string& filename, bool setColorKey=true) {
   SDL_Surface *temp = SDL_LoadBMP(filename.c_str());
   if (temp == NULL) {
     throw std::string("Unable to load bitmap.")+SDL_GetError();
@@ -53,24 +47,6 @@ void draw(SDL_Surface* image, SDL_Surface* screen,
   SDL_BlitSurface(image, &src, screen, &dest);
 }
 
-bool update(float& x) {
-  static unsigned int remainder = 0u; // ***
-  static unsigned int currentTicks = 0u;
-  static unsigned int prevTicks = SDL_GetTicks();
-  currentTicks = SDL_GetTicks();
-  unsigned int elapsedTicks = currentTicks - prevTicks + remainder; // ***
-
-  if( elapsedTicks < DT ) return false; // ***
-
-  float incr = X_VELOCITY * DT * 0.001; // ***
-  x += incr;
-
-  prevTicks = currentTicks;
-  remainder = elapsedTicks - DT; // ***
-
-  return true; // ***
-}
-
 int main() {
   try {
     init();
@@ -78,7 +54,8 @@ int main() {
     if (screen == NULL) {
       throw std::string("Unable to set video mode: ")+SDL_GetError();
     }
-    SDL_Surface *sky = getImage("images/sky.bmp", false);
+
+    SDL_Surface *sky = getImage("images/sky.bmp");
     SDL_Surface *star = getImage("images/redstar32.bmp", true);
 
     float x = -star->w;
@@ -86,7 +63,6 @@ int main() {
     SDL_Event event;
     bool makeVideo = false;
     bool done = false;
-    bool freshFrame = false; // ***
     GenerateFrames genFrames(screen);
     while ( !done) {
       while ( SDL_PollEvent(&event) ) {
@@ -95,21 +71,19 @@ int main() {
           if (event.key.keysym.sym == SDLK_ESCAPE) done = true;
           if (event.key.keysym.sym == SDLK_F4) {
             makeVideo = true;
+            std::cout << "Generating frames for video" << std::endl;
           }
         }
       }
+      if ( makeVideo ) {
+        genFrames.makeFrame();
+      }
       if ( x <= WIDTH-star->w ) {
-        freshFrame = update(x);
+        x += INCR_X;
       }
       else {
+        // Stop the frame capture when the animation is finished:
         makeVideo = false;
-      }
-    
-      if(freshFrame){
-        freshFrame=false;
-        if ( makeVideo ) {
-          genFrames.makeFrame();
-        }
       }
       draw(sky, screen);
       draw(star, screen, x, y);
